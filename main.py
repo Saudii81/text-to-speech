@@ -40,3 +40,20 @@ if not data_dir.exists():
 commands = np.array(tf.io.gfile.listdir(str(data_dir)))
 commands = commands[commands != 'README.md']
 print('Commands:', commands)
+
+train_ds, val_ds = tf.keras.utils.audio_dataset_from_directory(
+    directory=data_dir,
+    batch_size=64,
+    validation_split=0.2,
+    seed=0,
+    output_sequence_length=16000,
+    subset='both')
+
+label_names = np.array(train_ds.class_names)
+print()
+print("label names:", label_names)
+
+
+
+
+train_ds.element_spec
