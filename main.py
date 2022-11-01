@@ -57,3 +57,26 @@ print("label names:", label_names)
 
 
 train_ds.element_spec
+
+def squeeze(audio, labels):
+  audio = tf.squeeze(audio, axis=-1)
+  return audio, labels
+
+train_ds = train_ds.map(squeeze, tf.data.AUTOTUNE)
+val_ds = val_ds.map(squeeze, tf.data.AUTOTUNE)
+
+
+
+
+
+test_ds = val_ds.shard(num_shards=2, index=0)
+val_ds = val_ds.shard(num_shards=2, index=1)
+
+
+
+
+for example_audio, example_labels in train_ds.take(1):  
+  print(example_audio.shape)
+  print(example_labels.shape)
+
+label_names[[1,1,3,0]]
