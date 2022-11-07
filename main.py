@@ -162,3 +162,20 @@ plot_spectrogram(spectrogram.numpy(), axes[1])
 axes[1].set_title('Spectrogram')
 plt.suptitle(label.title())
 plt.show()
+
+
+def make_spec_ds(ds):
+  return ds.map(
+      map_func=lambda audio,label: (get_spectrogram(audio), label),
+      num_parallel_calls=tf.data.AUTOTUNE)
+
+
+
+
+
+
+train_spectrogram_ds = make_spec_ds(train_ds)
+val_spectrogram_ds = make_spec_ds(val_ds)
+test_spectrogram_ds = make_spec_ds(test_ds)
+
+
