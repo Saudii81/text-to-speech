@@ -179,3 +179,41 @@ val_spectrogram_ds = make_spec_ds(val_ds)
 test_spectrogram_ds = make_spec_ds(test_ds)
 
 
+for example_spectrograms, example_spect_labels in train_spectrogram_ds.take(1):
+  break
+
+
+
+
+
+
+rows = 3
+cols = 3
+n = rows*cols
+fig, axes = plt.subplots(rows, cols, figsize=(16, 9))
+
+for i in range(n):
+    r = i // cols
+    c = i % cols
+    ax = axes[r][c]
+    plot_spectrogram(example_spectrograms[i].numpy(), ax)
+    ax.set_title(commands[example_spect_labels[i].numpy()])
+
+plt.show()
+
+
+
+
+
+
+
+train_spectrogram_ds = train_spectrogram_ds.cache().shuffle(10000).prefetch(tf.data.AUTOTUNE)
+val_spectrogram_ds = val_spectrogram_ds.cache().prefetch(tf.data.AUTOTUNE)
+test_spectrogram_ds = test_spectrogram_ds.cache().prefetch(tf.data.AUTOTUNE)
+
+
+
+
+input_shape = example_spectrograms.shape[1:]
+print('Input shape:', input_shape)
+num_labels = len(commands)
