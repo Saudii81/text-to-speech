@@ -263,3 +263,51 @@ history = model.fit(
     epochs=EPOCHS,
     callbacks=tf.keras.callbacks.EarlyStopping(verbose=1, patience=2),
 )
+
+metrics = history.history
+plt.figure(figsize=(16,6))
+plt.subplot(1,2,1)
+plt.plot(history.epoch, metrics['loss'], metrics['val_loss'])
+plt.legend(['loss', 'val_loss'])
+plt.ylim([0, max(plt.ylim())])
+plt.xlabel('Epoch')
+plt.ylabel('Loss [CrossEntropy]')
+
+plt.subplot(1,2,2)
+plt.plot(history.epoch, 100*np.array(metrics['accuracy']), 100*np.array(metrics['val_accuracy']))
+plt.legend(['accuracy', 'val_accuracy'])
+plt.ylim([0, 100])
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy [%]')
+
+
+
+
+
+
+
+model.evaluate(test_spectrogram_ds, return_dict=True)
+
+
+
+
+
+
+
+y_pred = model.predict(test_spectrogram_ds)
+
+
+
+
+
+
+
+y_pred = tf.argmax(y_pred, axis=1)
+
+
+
+
+
+y_true = tf.concat(list(test_spectrogram_ds.map(lambda s,lab: lab)), axis=0)
+
+
