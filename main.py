@@ -311,3 +311,32 @@ y_pred = tf.argmax(y_pred, axis=1)
 y_true = tf.concat(list(test_spectrogram_ds.map(lambda s,lab: lab)), axis=0)
 
 
+confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
+plt.figure(figsize=(10, 8))
+sns.heatmap(confusion_mtx,
+            xticklabels=commands,
+            yticklabels=commands,
+            annot=True, fmt='g')
+plt.xlabel('Prediction')
+plt.ylabel('Label')
+plt.show()
+
+
+
+
+
+
+x = data_dir/'no/01bb6a2a_nohash_0.wav'
+x = tf.io.read_file(str(x))
+x, sample_rate = tf.audio.decode_wav(x, desired_channels=1, desired_samples=16000,)
+x = tf.squeeze(x, axis=-1)
+waveform = x
+x = get_spectrogram(x)
+x = x[tf.newaxis,...]
+
+prediction = model(x)
+plt.bar(commands, tf.nn.softmax(prediction[0]))
+plt.title('No')
+plt.show()
+
+display.display(display.Audio(waveform, rate=16000))
