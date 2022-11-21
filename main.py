@@ -355,3 +355,17 @@ for i in range(3):
 
 
 
+for i in range(3):
+  label = label_names[example_labels[i]]
+  waveform = example_audio[i]
+  spectrogram = get_spectrogram(waveform)
+
+  print('Label:', label)
+  print('Waveform shape:', waveform.shape)
+  print('Spectrogram shape:', spectrogram.shape)
+  print('Audio playback')
+  display.display(display.Audio(waveform, rate=16000))
+
+
+
+
