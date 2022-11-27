@@ -400,3 +400,14 @@ class ExportModel(tf.Module):
             'class_names': class_names}
 
 
+export = ExportModel(model)
+export(tf.constant(str(data_dir/'no/01bb6a2a_nohash_0.wav')))
+
+
+
+
+
+
+tf.saved_model.save(export, "saved")
+imported = tf.saved_model.load("saved")
+imported(waveform[tf.newaxis, :])
