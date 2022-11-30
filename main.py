@@ -41,6 +41,9 @@ commands = np.array(tf.io.gfile.listdir(str(data_dir)))
 commands = commands[commands != 'README.md']
 print('Commands:', commands)
 
+
+
+
 train_ds, val_ds = tf.keras.utils.audio_dataset_from_directory(
     directory=data_dir,
     batch_size=64,
@@ -57,6 +60,9 @@ print("label names:", label_names)
 
 
 train_ds.element_spec
+
+
+
 
 def squeeze(audio, labels):
   audio = tf.squeeze(audio, axis=-1)
@@ -79,7 +85,14 @@ for example_audio, example_labels in train_ds.take(1):
   print(example_audio.shape)
   print(example_labels.shape)
 
+
+
+
+
 label_names[[1,1,3,0]]
+
+
+
 
 rows = 3
 cols = 3
@@ -99,6 +112,10 @@ for i in range(n):
   ax.set_ylim([-1.1,1.1])
 
 plt.show()
+
+
+
+
 
 def get_spectrogram(waveform):
   # Convert the waveform to a spectrogram via a STFT.
@@ -164,6 +181,10 @@ plt.suptitle(label.title())
 plt.show()
 
 
+
+
+
+
 def make_spec_ds(ds):
   return ds.map(
       map_func=lambda audio,label: (get_spectrogram(audio), label),
@@ -177,6 +198,11 @@ def make_spec_ds(ds):
 train_spectrogram_ds = make_spec_ds(train_ds)
 val_spectrogram_ds = make_spec_ds(val_ds)
 test_spectrogram_ds = make_spec_ds(test_ds)
+
+
+
+
+
 
 
 for example_spectrograms, example_spect_labels in train_spectrogram_ds.take(1):
@@ -244,6 +270,9 @@ model.summary()
 
 
 
+
+
+
 model.compile(
     optimizer=tf.keras.optimizers.Adam(),
     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -263,6 +292,12 @@ history = model.fit(
     epochs=EPOCHS,
     callbacks=tf.keras.callbacks.EarlyStopping(verbose=1, patience=2),
 )
+
+
+
+
+
+
 
 metrics = history.history
 plt.figure(figsize=(16,6))
@@ -311,6 +346,10 @@ y_pred = tf.argmax(y_pred, axis=1)
 y_true = tf.concat(list(test_spectrogram_ds.map(lambda s,lab: lab)), axis=0)
 
 
+
+
+
+
 confusion_mtx = tf.math.confusion_matrix(y_true, y_pred)
 plt.figure(figsize=(10, 8))
 sns.heatmap(confusion_mtx,
@@ -341,17 +380,6 @@ plt.show()
 
 display.display(display.Audio(waveform, rate=16000))
 
-for i in range(3):
-  label = label_names[example_labels[i]]
-  waveform = example_audio[i]
-  spectrogram = get_spectrogram(waveform)
-
-  print('Label:', label)
-  print('Waveform shape:', waveform.shape)
-  print('Spectrogram shape:', spectrogram.shape)
-  print('Audio playback')
-  display.display(display.Audio(waveform, rate=16000))
-
 
 
 
@@ -365,6 +393,7 @@ for i in range(3):
   print('Spectrogram shape:', spectrogram.shape)
   print('Audio playback')
   display.display(display.Audio(waveform, rate=16000))
+
 
 
 
@@ -400,6 +429,10 @@ class ExportModel(tf.Module):
             'class_names': class_names}
 
 
+
+
+
+
 export = ExportModel(model)
 export(tf.constant(str(data_dir/'no/01bb6a2a_nohash_0.wav')))
 
@@ -411,3 +444,5 @@ export(tf.constant(str(data_dir/'no/01bb6a2a_nohash_0.wav')))
 tf.saved_model.save(export, "saved")
 imported = tf.saved_model.load("saved")
 imported(waveform[tf.newaxis, :])
+
+
