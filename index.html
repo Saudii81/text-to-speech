@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-time speech-to-text recognition with multi-language support, noise filtering, and live audio visualization. Convert spoken language to accurate text instantly.">
+  <meta property="og:title" content="VoxScribe — Speech to Text">
+  <meta property="og:description" content="Real-time speech recognition with multi-language support and live waveform visualization.">
+  <title>VoxScribe — Real-Time Speech to Text</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Background animated orbs -->
+  <div class="bg-orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">🎙️</div>
+        <h1>VoxScribe</h1>
+      </div>
+      <p class="tagline">Real-time speech recognition · Multi-language · Noise-aware</p>
+    </header>
+
+    <!-- Browser Support Warning -->
+    <div id="browserWarning" class="glass-card browser-warning">
+      <span class="warning-icon">⚠️</span>
+      <h2>Browser Not Supported</h2>
+      <p>The Web Speech API is not available in your browser. Please use <strong>Google Chrome</strong>, <strong>Microsoft Edge</strong>, or another Chromium-based browser for full speech recognition support.</p>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="errorBanner" class="error-banner">
+      <span class="error-icon">⚠️</span>
+      <span id="errorMessage">An error occurred</span>
+      <button class="error-close" id="errorClose" aria-label="Close error">✕</button>
+    </div>
+
+    <!-- Controls Bar -->
+    <section class="glass-card controls-bar" id="controlsSection">
+      <div class="language-group">
+        <label for="languageSelect">Language</label>
+        <div class="styled-select">
+          <select id="languageSelect" aria-label="Select language"></select>
+        </div>
+      </div>
+      <div class="language-group">
+        <label for="dialectSelect">Dialect</label>
+        <div class="styled-select">
+          <select id="dialectSelect" aria-label="Select dialect"></select>
+        </div>
+      </div>
+      <div class="toggle-group">
+        <span class="toggle-label">Noise Filter</span>
+        <label class="toggle" title="Enable high-pass noise filter">
+          <input type="checkbox" id="noiseFilterToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Microphone & Visualizer -->
+    <section class="glass-card mic-section">
+      <div class="mic-btn-wrapper" id="micWrapper">
+        <span class="pulse-ring"></span>
+        <button class="mic-btn" id="micBtn" title="Start recording" aria-label="Toggle speech recognition">
+          🎤
+        </button>
+      </div>
+      <span class="mic-status" id="micStatus">Click to start</span>
+      <div class="visualizer-container">
+        <canvas id="visualizer"></canvas>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="glass-card stats-bar">
+      <div class="stat-item">
+        <span class="stat-icon">📝</span>
+        <span class="stat-label">Words</span>
+        <span class="stat-value" id="wordCount">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🎯</span>
+        <span class="stat-label">Confidence</span>
+        <span class="stat-value" id="avgConfidence">—</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">⏱️</span>
+        <span class="stat-label">Duration</span>
+        <span class="stat-value" id="duration">00:00</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">🌐</span>
+        <span class="stat-label">Language</span>
+        <span class="stat-value" id="currentLang">en-US</span>
+      </div>
+    </section>
+
+    <!-- Transcript Panel -->
+    <section class="glass-card transcript-panel">
+      <div class="transcript-header">
+        <h2>📜 Transcript</h2>
+        <div class="transcript-actions">
+          <button class="action-btn" id="copyBtn" title="Copy transcript">
+            <span class="btn-icon">📋</span> Copy
+          </button>
+          <button class="action-btn" id="downloadBtn" title="Download as text file">
+            <span class="btn-icon">💾</span> Download
+          </button>
+          <button class="action-btn" id="clearBtn" title="Clear transcript">
+            <span class="btn-icon">🗑️</span> Clear
+          </button>
+        </div>
+      </div>
+      <div class="transcript-body" id="transcriptBody">
+        <div class="transcript-placeholder" id="placeholder">
+          <span class="placeholder-icon">🎙️</span>
+          <p>Press the microphone button and start speaking.<br>Your words will appear here in real time.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="languages.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
